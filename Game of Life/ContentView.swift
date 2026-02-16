@@ -32,20 +32,32 @@ struct ContentView: View {
                 //Regular View
                 if horizontalSizeClass == .regular{
                     HStack{
-                        BoardView(label: "start", boardSize: logic.boardSize, boardContent: logic.oldBoard)
-                        BoardView(label: "next generation", boardSize: logic.boardSize, boardContent: logic.newBoard)
+                        BoardView(label: "start", boardSize: logic.boardSize, boardContent: logic.initialBoard)
+                        BoardView(label: "generation \(logic.counter)", boardSize: logic.boardSize, boardContent: logic.newBoard)
                     }
                     .padding()}
                 //Compact View
                 else{
                     VStack{
-                        BoardView(label: "start", boardSize: logic.boardSize, boardContent: logic.oldBoard)
+                        BoardView(label: "start", boardSize: logic.boardSize, boardContent: logic.initialBoard)
                             .padding(5)
-                        BoardView(label: "next generation", boardSize: logic.boardSize, boardContent: logic.newBoard)
+                        BoardView(label: "generation \(logic.counter)", boardSize: logic.boardSize, boardContent: logic.newBoard)
                         Spacer()
                     }
                     
                 }
+                HStack{
+                    Button("Restart"){
+                        logic.fillRandomly()
+                        logic.calculateNext()
+                        logic.counter=1
+                    }.buttonStyle()
+                    Button("Next generation") {
+                        logic.nextGen()
+                    }.buttonStyle()
+                   
+                }
+                
                 
             }
             .preferredColorScheme(isDarkmode ? .dark: .light)
@@ -64,11 +76,26 @@ struct TextStyle: ViewModifier{
         }
 }
 
+struct ButtonStyle: ViewModifier{
+    func body(content: Content) -> some View {
+        content
+            .padding(10)
+            .background(Color("boxBackground"))
+            .clipShape(RoundedRectangle(cornerRadius: 5.0))
+            .foregroundStyle(Color("alive"))
+    }
+}
+
 extension View{
     func textStyle(size: Double) -> some View {
         self.modifier(TextStyle(size: size))
     }
+    func buttonStyle()->some View{
+        self.modifier(ButtonStyle())
+    }
 }
+
+
 
 
 struct BoardView: View {

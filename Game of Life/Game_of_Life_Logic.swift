@@ -9,12 +9,15 @@ import Foundation;
 
 class GameOfLifeLogic: ObservableObject{
     
+    @Published var initialBoard: [[Int]];
     @Published var oldBoard: [[Int]];
     @Published var newBoard: [[Int]];
+    @Published var counter = 1;
     
     let boardSize = 10;
 
     init() {
+        self.initialBoard = Array(repeating: Array(repeating: 0, count: boardSize), count: boardSize);
         self.oldBoard = Array(repeating: Array(repeating: 0, count: boardSize), count: boardSize);
         self.newBoard = Array(repeating: Array(repeating: 0, count: boardSize), count: boardSize);
         
@@ -28,6 +31,7 @@ class GameOfLifeLogic: ObservableObject{
                 oldBoard[row][column] = Int(arc4random() % 2);
             }
         }
+        initialBoard = oldBoard
     }
     
     
@@ -59,6 +63,7 @@ class GameOfLifeLogic: ObservableObject{
                 
             }
         }
+    
     }
     
     func countAliveNeightbors(row:Int, column:Int)->Int{
@@ -81,4 +86,10 @@ class GameOfLifeLogic: ObservableObject{
         return count
     }
     
+    func nextGen()
+    {
+        oldBoard = newBoard
+        calculateNext()
+        counter+=1
+    }
 }
