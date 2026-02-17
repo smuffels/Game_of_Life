@@ -32,16 +32,18 @@ struct ContentView: View {
                 //Regular View
                 if horizontalSizeClass == .regular{
                     HStack{
-                        BoardView(label: "start", boardSize: logic.boardSize, boardContent: logic.initialBoard)
-                        BoardView(label: "generation \(logic.counter)", boardSize: logic.boardSize, boardContent: logic.newBoard)
+                        BoardView(label: "start", boardSize: logic.boardSize, boardContent: logic.initialBoard, maxHeight: 200)
+                        BoardView(label: "generation \(logic.counter)", boardSize: logic.boardSize, boardContent: logic.newBoard, maxHeight: 200)
                     }
-                    .padding()}
+                    .padding()
+                    Spacer()
+                }
                 //Compact View
                 else{
                     VStack{
-                        BoardView(label: "start", boardSize: logic.boardSize, boardContent: logic.initialBoard)
+                        BoardView(label: "start", boardSize: logic.boardSize, boardContent: logic.initialBoard, maxHeight: 300)
                             .padding(5)
-                        BoardView(label: "generation \(logic.counter)", boardSize: logic.boardSize, boardContent: logic.newBoard)
+                        BoardView(label: "generation \(logic.counter)", boardSize: logic.boardSize, boardContent: logic.newBoard, maxHeight: 300)
                         Spacer()
                     }
                     
@@ -51,10 +53,10 @@ struct ContentView: View {
                         logic.fillRandomly()
                         logic.calculateNext()
                         logic.counter=1
-                    }.buttonStyle()
+                    }.customButtonStyle()
                     Button("Next generation") {
                         logic.nextGen()
-                    }.buttonStyle()
+                    }.customButtonStyle()
                    
                 }
                 
@@ -76,9 +78,10 @@ struct TextStyle: ViewModifier{
         }
 }
 
-struct ButtonStyle: ViewModifier{
+struct CustomButtonStyle: ViewModifier{
     func body(content: Content) -> some View {
         content
+            .buttonStyle(.plain)
             .padding(10)
             .background(Color("boxBackground"))
             .clipShape(RoundedRectangle(cornerRadius: 5.0))
@@ -90,8 +93,8 @@ extension View{
     func textStyle(size: Double) -> some View {
         self.modifier(TextStyle(size: size))
     }
-    func buttonStyle()->some View{
-        self.modifier(ButtonStyle())
+    func customButtonStyle()->some View{
+        self.modifier(CustomButtonStyle())
     }
 }
 
@@ -102,6 +105,7 @@ struct BoardView: View {
     var label: String
     var boardSize: Int
     var boardContent: [[Int]]
+    var maxHeight: CGFloat
     
     var body: some View {
         GroupBox(label: Text(label).textStyle(size: 20)
@@ -119,7 +123,7 @@ struct BoardView: View {
             }
         }
         .backgroundStyle(Color("boxBackground"))
-        .frame(maxWidth:300)
+        .frame(maxWidth: 300, maxHeight: maxHeight)
         .aspectRatio(1, contentMode: .fit)
         
     }
