@@ -50,7 +50,9 @@ struct ContentView: View {
                             .padding(5)
                         BoardView(label: "generation \(logic.counter)", boardSize: logic.boardSize, boardContent: logic.newBoard, cellSize: cellSizeNormal, maxHeight: 300)
                         Spacer()
-                    }.fullScreenCover(isPresented: $isEditingStartBoard) {
+                    }
+                    #if os(iOS)
+                    .fullScreenCover(isPresented: $isEditingStartBoard) {
                         EditStartBoardView(
                             boardSize: logic.boardSize,
                             boardContent: logic.initialBoard,
@@ -62,6 +64,7 @@ struct ContentView: View {
                             }
                         )
                     }
+                    #endif
 
                     
                 }
