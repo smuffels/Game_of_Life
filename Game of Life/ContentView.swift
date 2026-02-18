@@ -73,14 +73,15 @@ struct ContentView: View {
                         logic.setStartManually()
                         isEditingStartBoard = true
                     }.customButtonStyle()
-                    Button("Next generation") {
-                        logic.nextGen()
-                    }.customButtonStyle()
-                    Button("Restart"){
+                    Button("Start randomly"){
                         logic.fillRandomly()
                         logic.calculateNext()
                         logic.counter=1
                     }.customButtonStyle()
+                    Button("Next gen") {
+                        logic.nextGen()
+                    }.customButtonStyle()
+                    
                     
                    
                 }
