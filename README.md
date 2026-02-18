@@ -17,3 +17,13 @@ https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#
 - option to place the living cells manually on the startig board
 - button to evolve to the next generation
 - option to place living cells randomly on the starting board
+
+below you can see a few screenshots from the game.
+1. random start generation with the first generation
+2. the view for the manual start (I wanted the board to be bigger so it actually works to tap the cells on the phone)
+3. the manual start a few generations deep
+4. light mode
+
+  <img src='Pictures/game_of_life.png' width='30%' /> <img src='Pictures/manual_start.png' width='30%' />
+  <img src='Pictures/few_generations_in.png' width='30%' /> <img src='Pictures/light_mode.png' width='30%' />
+  
