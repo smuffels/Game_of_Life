@@ -32,7 +32,9 @@ struct ContentView: View {
                 //Regular View
                 if horizontalSizeClass == .regular{
                     HStack{
-                        BoardView(label: "start", boardSize: logic.boardSize, boardContent: logic.initialBoard, maxHeight: 200)
+                        BoardView(label: "start", boardSize: logic.boardSize, boardContent: logic.initialBoard, maxHeight: 200, isEditable: logic.isEditable, onCellTap: {row, col in logic.toggleCell(row: row, column: col)
+                        })
+                        
                         BoardView(label: "generation \(logic.counter)", boardSize: logic.boardSize, boardContent: logic.newBoard, maxHeight: 200)
                     }
                     .padding()
@@ -49,14 +51,18 @@ struct ContentView: View {
                     
                 }
                 HStack{
+                    Button("Start manually") {
+                        logic.setStartManually()
+                    }.customButtonStyle()
+                    Button("Next generation") {
+                        logic.nextGen()
+                    }.customButtonStyle()
                     Button("Restart"){
                         logic.fillRandomly()
                         logic.calculateNext()
                         logic.counter=1
                     }.customButtonStyle()
-                    Button("Next generation") {
-                        logic.nextGen()
-                    }.customButtonStyle()
+                    
                    
                 }
                 
@@ -106,6 +112,8 @@ struct BoardView: View {
     var boardSize: Int
     var boardContent: [[Int]]
     var maxHeight: CGFloat
+    var isEditable: Bool = false //has to be defined as false bc cant be optional parameter bc if needs a value
+    var onCellTap: ((Int, Int) -> Void)? = nil
     
     var body: some View {
         GroupBox(label: Text(label).textStyle(size: 20)
@@ -117,6 +125,11 @@ struct BoardView: View {
                             Rectangle()
                                 .fill(boardContent[row][col] == 1 ? Color("alive") : Color("dead"))
                                 .frame(width: 15, height: 15)
+                                .onTapGesture {
+                                    if(isEditable){
+                                        onCellTap?(row, col)
+                                    }
+                                }
                         }
                     }
                 }

@@ -12,10 +12,11 @@ class GameOfLifeLogic: ObservableObject{
     @Published var initialBoard: [[Int]];
     @Published var oldBoard: [[Int]];
     @Published var newBoard: [[Int]];
-    @Published var counter = 1;
+    @Published var counter: Int = 1;
+    @Published var isEditable: Bool = false;
     
     let boardSize = 10;
-
+    
     init() {
         self.initialBoard = Array(repeating: Array(repeating: 0, count: boardSize), count: boardSize);
         self.oldBoard = Array(repeating: Array(repeating: 0, count: boardSize), count: boardSize);
@@ -24,7 +25,7 @@ class GameOfLifeLogic: ObservableObject{
         fillRandomly();
         calculateNext();
     }
-
+    
     func fillRandomly(){
         for row in 0..<boardSize {
             for column in 0..<boardSize{
@@ -58,12 +59,12 @@ class GameOfLifeLogic: ObservableObject{
                         //Any live cell with more than three live neighbours dies, as if by overpopulation.
                         newBoard[row][column] = 0;
                     }
-
+                    
                 }
                 
             }
         }
-    
+        
     }
     
     func countAliveNeightbors(row:Int, column:Int)->Int{
@@ -76,7 +77,7 @@ class GameOfLifeLogic: ObservableObject{
                 let newRow = row + i
                 let newCol = column + j
                 
-
+                
                 // check if in bounds of the board
                 if newRow >= 0 && newRow < boardSize && newCol >= 0 && newCol < boardSize {
                     count += oldBoard[newRow][newCol]
@@ -91,5 +92,24 @@ class GameOfLifeLogic: ObservableObject{
         oldBoard = newBoard
         calculateNext()
         counter+=1
+        isEditable=false
+    }
+    
+    func toggleCell(row:Int, column: Int){
+        if initialBoard[row][column] == 0 {
+            initialBoard[row][column] = 1
+        } else {
+            initialBoard[row][column] = 0
+        }
+        oldBoard=initialBoard
+        calculateNext()
+    }
+    
+    func setStartManually(){
+        
+        isEditable = true
+        initialBoard=Array(repeating: Array(repeating: 0, count: boardSize), count: boardSize)
+        newBoard=initialBoard
+        counter=1
     }
 }
